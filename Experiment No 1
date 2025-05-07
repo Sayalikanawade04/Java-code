@@ -31,5 +31,4 @@ void loop() {
   Serial.println(temperatureC);
 
   ThingSpeak.writeField(channelID, 1, temperatureC, apiKey);
-  delay(15000);  // ThingSpeak minimum delay is 15 seconds
-}
+  delay(15000);  // ThingSpeak minimum del
