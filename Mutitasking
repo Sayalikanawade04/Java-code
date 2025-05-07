@@ -1,0 +1,51 @@
+#include "config.h"
+#include "stdlib.h"
+#include "serial.h"
+
+/*Each task must have its own stack space.*/
+OS_STK t1[100], t2[100], t3[100];
+
+void task1() {
+    while (1) {
+        IO0SET = 1 << 5;  // Turn ON LED at P0.5
+        OSTimeDlyHMSM(0, 0, 1, 0); 
+        IO0CLR = 1 << 5;  // Turn OFF LED
+        OSTimeDlyHMSM(0, 0, 1, 0); 
+    }
+}
+
+void task2() {
+    while (1) {
+        IO0SET = 1 << 6;  // Turn ON LED at P0.6
+        OSTimeDlyHMSM(0, 0, 2, 0); 
+        IO0CLR = 1 << 6;  // Turn OFF LED
+        OSTimeDlyHMSM(0, 0, 2, 0);
+    }
+}
+
+void task3() {
+    while (1) {
+        IO0SET = 1 << 7;  // Turn ON LED at P0.7
+        OSTimeDlyHMSM(0, 0, 3, 0); 
+        IO0CLR = 1 << 7;  // Turn OFF LED
+        OSTimeDlyHMSM(0, 0, 3, 0);
+    }
+}
+
+int main() {
+    PINSEL0 = 0x00000000;  // Configure PORT0 as GPIO
+    PINSEL1 = 0x00000000;  
+    IO0DIR = 0xFFFFFFFF;    // Set all of PORT0 as output
+
+    TargetInit();
+    init_serial();  // For serial output (if needed)
+
+    OSInit();  // Initialize uC/OS-II
+
+    // ✅ Create tasks BEFORE starting the OS
+    OSTaskCreate(task1, NULL, &t1[99], 1);
+    OSTaskCreate(task2, NULL, &t2[99], 2);
+    OSTaskCreate(task3, NULL, &t3[99], 3);
+
+    OSStart();  // Start the OS (this never returns)
+}
