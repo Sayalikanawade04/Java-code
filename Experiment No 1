@@ -1,26 +1,35 @@
-package practical;
+#include <ESP8266WiFi.h>
+#include "ThingSpeak.h"
 
-public class Exp1 {
-static int x=22;
-	public static void display() {
-		int x=44;
-		System.out.println("This is a static method "+x);
-	}
-	public  void display2() {
-		int x=44;
-		System.out.println("This is a non-static method "+x);
-	}
-	public static void main(String[] args) {
-		Exp1 obj2=new Exp1();   //creating object of z
-		 
-		System.out.println(x);  //static variable
-		Exp1.display();         // static method
-		obj2.display2();        //non static method accessed by creating object
+const char* ssid = "YOUR_WIFI_SSID";
+const char* password = "YOUR_WIFI_PASSWORD";
+const char* apiKey = "YOUR_THINGSPEAK_API_KEY";  // Channel Write API Key
+const long channelID = YOUR_CHANNEL_ID;          // Replace with your ThingSpeak channel ID
 
-	}
+WiFiClient client;
 
+void setup() {
+  Serial.begin(115200);
+  WiFi.begin(ssid, password);
+  Serial.println("Connecting to WiFi...");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.print(".");
+  }
+  Serial.println("\nConnected.");
+  
+  ThingSpeak.begin(client);
 }
-Output:
-22
-This is a static method 44.
-This is a non-static method 44.
+
+void loop() {
+  int analogValue = analogRead(A0);
+  float voltage = analogValue * (3.3 / 1023.0);   // Convert to voltage (ESP works on 3.3V)
+  float temperatureC = voltage * 100.0;           // LM35 gives 10mV per °C
+
+  Serial.print("Temp: ");
+  Serial.println(temperatureC);
+
+  ThingSpeak.writeField(channelID, 1, temperatureC, apiKey);
+  delay(15000);  // ThingSpeak minimum delay is 15 seconds
+}
