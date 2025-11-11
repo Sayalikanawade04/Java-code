@@ -1,0 +1,127 @@
+
+You said:
+Familirization of network environment understanding and using network utilities ipconfig,netstat,ping,arp,telent,fip,finger,trace route
+This is practical of Computer network give commands to run practical on command prompt
+ChatGPT said:
+Here’s a simple list of commands you can run on Command Prompt (CMD) for your Computer Network practical on
+“Familiarization of network environment and using network utilities” like ipconfig, netstat, ping, arp, telnet, ftp, finger, and tracert.
+
+🖥️ 1. View Network Configuration
+Command:
+
+ipconfig
+Use: Displays your computer’s IP address, subnet mask, and default gateway.
+
+For detailed info:
+
+ipconfig /all
+🌐 2. Check Active Network Connections
+Command:
+
+netstat
+Use: Shows all active network connections and listening ports.
+
+To display continuous updates:
+
+netstat -a
+📡 3. Test Connectivity to Another Device or Website
+Command:
+
+ping www.google.com
+Use: Checks if a host or website is reachable and measures response time.
+
+To ping a specific IP:
+
+ping 8.8.8.8
+🧾 4. View and Manage ARP Cache
+Command:
+
+arp -a
+Use: Displays IP and MAC address mapping in your network.
+
+🔌 5. Connect to a Remote Host Using Telnet
+Command:
+
+telnet www.google.com 80
+Use: Tests connectivity to a specific port on a remote host.
+(Note: You may need to enable Telnet first using “Turn Windows features on or off.”)
+
+📁 6. Connect to an FTP Server
+Command:
+
+ftp ftp.dlptest.com
+Use: Connects to an FTP server for file transfer.
+
+Then login using:
+
+Username: dlpuser
+Password: rNrKYTX9g7z3RgJRmxWuGHbeu
+👤 7. Get Information About a Network User (if enabled)
+Command:
+
+finger username@hostname
+Use: Displays information about a user on a remote system (used in older systems, may not work on modern Windows).
+
+🧭 8. Trace Route to a Website
+Command:
+
+tracert www.google.com
+Use: Shows the path (routers/hops) data takes to reach a destination.
+
+✅ Optional: Check Internet Connection Status
+Command:
+
+ping 127.0.0.1
+Use: Tests your own network adapter.
+
+Would you like me to make a step-by-step practical report format (aim, theory, commands, output, conclusion) for this experiment too?
+
+You said:
+Give it properly 
+ChatGPT said:
+Sure 👍 Here’s your complete practical file format for
+Computer Network Experiment:
+“Familiarization of network environment and using network utilities (ipconfig, netstat, ping, arp, telnet, ftp, finger, tracert)”
+
+🧪 Experiment No.: 1
+Title:
+Familiarization of network environment and using network utilities — ipconfig, netstat, ping, arp, telnet, ftp, finger, tracert.
+
+Aim:
+To understand and use basic network commands to check and analyze the network environment and connectivity.
+
+Apparatus/Software Required:
+Computer system
+
+Windows Operating System
+
+Command Prompt (CMD)
+
+Internet connection
+
+Theory:
+Network utilities are tools used to test, configure, and troubleshoot network connections.
+Some common utilities are:
+
+Utility	Description
+ipconfig	Displays IP address, subnet mask, and gateway of the system.
+netstat	Shows current network connections and listening ports.
+ping	Checks connectivity between local and remote systems.
+arp	Displays IP and MAC address mapping.
+telnet	Connects to a remote system using a specific port.
+ftp	Transfers files between local and remote computers.
+finger	Provides information about users on a network (if supported).
+tracert	Traces the route packets take to reach a destination.
+Commands and Their Use:
+Sr. No.	Command	Purpose / Output
+1	ipconfig	Shows IP configuration of the system.
+2	ipconfig /all	Displays detailed network information including DNS and MAC.
+3	netstat	Displays all active network connections.
+4	netstat -a	Shows all connections and listening ports.
+5	ping www.google.com	Tests connectivity to Google’s server.
+6	ping 8.8.8.8	Checks connectivity using Google’s DNS IP.
+7	arp -a	Shows IP to MAC address mapping table.
+8	telnet www.google.com 80	Connects to Google server via port 80 (HTTP).
+9	ftp ftp.dlptest.com	Connects to an FTP server for file transfer.
+10	finger username@hostname	Displays information about a remote user (if supported).
+11	tracert www.google.com	Displays the route data packets take to reach Google.
