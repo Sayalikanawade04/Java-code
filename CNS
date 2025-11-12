@@ -1,75 +1,50 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <string.h>
-#include <time.h>
-// Function to find GCD
-long int gcd(long int a, long int b) {
-return (b == 0) ? a : gcd(b, a % b);
+#include <ESP8266WiFi.h>
+#include "ThingSpeak.h"
+
+const int LM35 = A0;
+
+// WiFi credentials
+char ssid[] = "EIPL";
+char pass[] = "123456789";
+
+// ThingSpeak credentials
+WiFiClient client;
+unsigned long myChannelNumber = 3150318;  // ✅ No quotes
+const int FieldNumber = 1;
+const char * myWriteAPIKey = "YBRNGZ2Z70NJVB8N";
+
+void setup() {
+  Serial.begin(115200);
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, pass);
+  Serial.print("Connecting to WiFi");
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(1000);
+    Serial.print(".");
+  }
+
+  Serial.println("\nConnected to WiFi");
+  ThingSpeak.begin(client);
 }
-// Function to check if a number is prime
-int isprime(long int a) {
-if (a < 2)
-return 0;
-for (long int i = 2; i <= sqrt(a); i++)
-if (a % i == 0)
-return 0;
-return 1;
-}
-// Efficient modular exponentiation
-long int modexp(long int base, long int exp, long int mod) {
-long int result = 1;
-base = base % mod;
-while (exp > 0) {
-if (exp % 2 == 1)
-result = (result * base) % mod;
-exp = exp / 2;
-base = (base * base) % mod;
-}
-return result;
-}
-int main() {
-long int p, q, n, phi, e, d;
-long int cipher[100];
-char text[100];
-int i, len;
-srand(time(NULL));
-printf("Enter the text to be encrypted: ");
-scanf("%99[^\n]", text); // allows spaces
-len = strlen(text);
-// Generate two random primes
-do {
-p = rand() % 400 + 100; // 100–500 range
-} while (!isprime(p));
-do {
-q = rand() % 400 + 100;
-} while (!isprime(q) || q == p);
-n = p * q;
-phi = (p - 1) * (q - 1);
-// Choose e (public key exponent)
-do {
-e = rand() % (phi - 2) + 2;
-} while (gcd(e, phi) != 1);
-// Compute d (private key exponent)
-d = 2;
-while ((d * e) % phi != 1)
-d++;
-printf("\nTwo prime numbers P and Q are %ld and %ld\n", p, q);
-printf("n = %ld\nphi(n) = %ld\n", n, phi);
-printf("Public key (n, e): (%ld, %ld)\n", n, e);
-printf("Private key (n, d): (%ld, %ld)\n", n, d);
-// Encrypt
-printf("\nEncrypted message:\n");
-for (i = 0; i < len; i++) {
-cipher[i] = modexp(text[i], e, n);
-printf("%ld ", cipher[i]);
-}
-// Decrypt
-printf("\n\nDecrypted message:\n");
-for (i = 0; i < len; i++) {
-char decrypted = (char)modexp(cipher[i], d, n);
-printf("%c", decrypted);
-}
-printf("\n");
-return 0;
+
+void loop() {
+  int ADC = analogRead(LM35);
+  float voltage = ADC * (3.3 / 1023.0); // 3.3V reference for NodeMCU
+  float temp = voltage * 100.0;         // 10mV/°C from LM35
+
+  Serial.print("Temperature = ");
+  Serial.print(temp);
+  Serial.println(" °C");
+
+  int statusCode = ThingSpeak.writeField(myChannelNumber, FieldNumber, temp, myWriteAPIKey);
+
+  if (statusCode == 200) {
+    Serial.println("Channel update successful.");
+  } else {
+    Serial.print("Problem updating channel. HTTP error code ");
+    Serial.println(statusCode);
+  }
+
+  delay(15000); // 15 seconds (ThingSpeak rate limit)
 }
