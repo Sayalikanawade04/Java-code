@@ -1,0 +1,25 @@
+#include <SoftwareSerial.h>
+
+// Use pin 10 for RX and pin 11 for TX
+SoftwareSerial bluetoothSerial(10, 11); 
+
+void setup() {
+  // Start the hardware serial for debugging on the PC (via USB)
+  Serial.begin(9600);
+  Serial.println("Arduino is ready. Connect HC-05 VCC pin.");
+
+  // Start the software serial for the Bluetooth module
+  bluetoothSerial.begin(9600); // HC-05 default baud rate is 9600
+}
+
+void loop() {
+  // Check for data coming from the Bluetooth module (from the PC)
+  if (bluetoothSerial.available()) {
+    char receivedData = bluetoothSerial.read();
+    Serial.print("Received: ");
+    Serial.write(receivedData); // Show on USB serial monitor
+    
+    // Echo the data back to the PC via Bluetooth
+    bluetoothSerial.write(receivedData);
+  }
+}
