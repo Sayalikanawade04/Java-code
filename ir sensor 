@@ -1,0 +1,33 @@
+// Define the pin numbers for the IR sensor and the buzzer
+const int irSensorPin = 2;
+const int buzzerPin = 8;
+
+void setup() {
+  // Initialize Serial Communication for debugging
+  Serial.begin(9600);
+  
+  // Set the pin modes
+  pinMode(irSensorPin, INPUT); // IR Sensor pin as input
+  pinMode(buzzerPin, OUTPUT);  // Buzzer pin as output
+  
+  // Ensure the buzzer is off initially
+  digitalWrite(buzzerPin, LOW);
+}
+
+void loop() {
+  // Read the state of the IR sensor's output pin
+  int sensorState = digitalRead(irSensorPin);
+  
+  // Most common IR sensors output LOW when an object is detected
+  if (sensorState == LOW) {
+    // Intruder Detected
+    Serial.println("Intruder Detected!");
+    digitalWrite(buzzerPin, HIGH); // Turn the buzzer ON
+  } else {
+    // No Intruder
+    Serial.println("All Clear");
+    digitalWrite(buzzerPin, LOW); // Turn the buzzer OFF
+  }
+  
+  delay(200); // A small delay to prevent rapid flickering
+}
