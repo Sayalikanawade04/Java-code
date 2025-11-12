@@ -1,0 +1,43 @@
+#define BLYNK_TEMPLATE_ID "Your_Template_ID"
+#define BLYNK_AUTH_TOKEN "Your_Auth_Token"
+#define BLYNK_PRINT Serial
+
+#include <ESP8266WiFi.h>
+#include <BlynkSimpleEsp8266.h>
+
+char auth[] = "Your_Auth_Token";
+char ssid[] = "Your_WiFi_Name";
+char pass[] = "Your_WiFi_Password";
+
+#define trigPin D5
+#define echoPin D6
+
+long duration;
+float distance;
+
+void setup() {
+  Serial.begin(9600);
+  Blynk.begin(auth, ssid, pass);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+}
+
+void loop() {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distance = (duration * 0.0343) / 2;
+
+  Serial.print("Distance: ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  Blynk.virtualWrite(V1, distance); // send distance to Blynk app
+
+  delay(1000);
+  Blynk.run();
+}
